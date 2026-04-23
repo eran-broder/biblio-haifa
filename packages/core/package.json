@@ -1,0 +1,24 @@
+{
+  "name": "@biblio/core",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./enums": "./src/enums.ts",
+    "./schemas": "./src/schemas.ts",
+    "./errors": "./src/errors.ts",
+    "./parsers": "./src/parsers/index.ts",
+    "./format": "./src/format/index.ts",
+    "./scrape": "./src/scrape/index.ts",
+    "./library": "./src/library/index.ts",
+    "./storage": "./src/storage/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf dist *.tsbuildinfo"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
+  }
+}

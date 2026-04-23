@@ -1,0 +1,19 @@
+{
+  "name": "@biblio/http-node",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@biblio/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.3"
+  }
+}

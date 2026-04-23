@@ -1,0 +1,22 @@
+{
+  "name": "@biblio/cli",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "biblio": "./src/index.ts"
+  },
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@biblio/core": "workspace:*",
+    "@biblio/http-node": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.3",
+    "tsx": "^4.21.0"
+  }
+}
