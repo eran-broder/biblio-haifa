@@ -1,8 +1,11 @@
 #!/usr/bin/env node
-import { spawnSync } from 'node:child_process';
+import { createRequire } from 'node:module';
 import { existsSync, rmSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+const require = createRequire(import.meta.url);
+const AdmZip = require('adm-zip');
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = resolve(HERE, '..');
@@ -16,15 +19,8 @@ if (!existsSync(DIST)) {
 
 if (existsSync(OUT)) rmSync(OUT);
 
-const r = spawnSync('tar', ['-a', '-c', '-f', 'biblio.zip', '-C', 'dist', '.'], {
-  stdio: 'inherit',
-  shell: true,
-  cwd: PKG_ROOT,
-});
-
-if (r.status !== 0) {
-  console.error(`✗ tar failed with exit ${r.status}`);
-  process.exit(r.status ?? 1);
-}
+const zip = new AdmZip();
+zip.addLocalFolder(DIST);
+zip.writeZip(OUT);
 
 console.log(`✓ wrote ${OUT}`);
