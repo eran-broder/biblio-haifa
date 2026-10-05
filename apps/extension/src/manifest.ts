@@ -3,7 +3,7 @@ import { defineManifest } from '@crxjs/vite-plugin';
 export default defineManifest({
   manifest_version: 3,
   name: 'ביבליו · ספריות חיפה',
-  version: '0.2.0',
+  version: '0.2.1',
   description: 'Fetch borrowed books from Haifa libraries for your family',
   action: {
     default_popup: 'src/popup/index.html',
