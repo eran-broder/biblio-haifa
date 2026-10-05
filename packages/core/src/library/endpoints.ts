@@ -3,8 +3,8 @@ export const LIBRARY_ORIGIN = `https://${LIBRARY_HOST}`;
 
 export enum LibraryPath {
   Root = '/',
-  Login = '/BuildaGate5library/general/lgn.php',
-  PersonalArea = '/BuildaGate5library/general/library_user_report_personal.php',
+  Login = '/BuildaGate8library/general/lgn.php',
+  PersonalArea = '/BuildaGate8library/general/library_user_report_personal.php',
 }
 
 export const CARD = 'Card6';
