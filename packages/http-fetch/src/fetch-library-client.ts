@@ -1,11 +1,11 @@
 import {
   LIBRARY_ORIGIN,
-  LibraryAuthError,
   LibraryNetworkError,
   LibraryPath,
-  extractUserId,
+  LibraryUnexpectedResponseError,
   loginBody,
   personalAreaBody,
+  userIdFromLoginResponse,
   type LibraryClient,
   type LoggedIn,
 } from '@biblio/core';
@@ -13,6 +13,17 @@ import {
 const FORM_HEADERS: HeadersInit = {
   'Content-Type': 'application/x-www-form-urlencoded',
 };
+
+function assertUsable(response: Response, path: LibraryPath): void {
+  if (response.redirected) {
+    throw new LibraryUnexpectedResponseError(
+      `The library redirected ${path} to ${response.url} — the site may have changed.`,
+    );
+  }
+  if (!response.ok) {
+    throw new LibraryNetworkError(`Library responded ${response.status}`);
+  }
+}
 
 async function postForm(path: LibraryPath, body: string): Promise<string> {
   let response: Response;
@@ -26,9 +37,7 @@ async function postForm(path: LibraryPath, body: string): Promise<string> {
   } catch (e) {
     throw new LibraryNetworkError(e instanceof Error ? e.message : 'Network error');
   }
-  if (!response.ok) {
-    throw new LibraryNetworkError(`Library responded ${response.status}`);
-  }
+  assertUsable(response, path);
   return response.text();
 }
 
@@ -48,9 +57,7 @@ export function createFetchLibraryClient(): LibraryClient {
     async login(username, password): Promise<LoggedIn> {
       await openSession();
       const body = await postForm(LibraryPath.Login, loginBody(username, password));
-      const userId = extractUserId(body);
-      if (!userId) throw new LibraryAuthError();
-      return { userId };
+      return { userId: userIdFromLoginResponse(body) };
     },
 
     async fetchPersonalArea(session, familyItemId) {

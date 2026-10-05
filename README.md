@@ -20,6 +20,7 @@ apps/
   cli           CLI (node + http-node)
   extension     Chrome MV3 — the shipping product
   web           Netlify companion at biblio-haifa.netlify.app (shared UI + HTTP scrape)
+  lambda        AWS Lambda behind the web app (core + http-node, esbuild bundle)
 ```
 
 ## Develop
@@ -29,6 +30,12 @@ pnpm install
 pnpm ext:dev              # extension in dev mode (load unpacked from apps/extension/dist)
 pnpm --filter @biblio/web dev
 pnpm cli -- --username ... --password ...
+```
+
+## Deploy the web app's backend
+
+```bash
+pnpm --filter @biblio/lambda deploy   # build + update-function-code biblio-fetch-books (il-central-1, AWS profile `library`)
 ```
 
 ## Publish a new extension version

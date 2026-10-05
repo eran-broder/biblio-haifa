@@ -1,25 +1,13 @@
 import { useCallback, useState } from 'react';
 import type { Credentials, FetchResult, ProgressEvent } from '@biblio/core';
-import { FetchErrorCode, LibraryAuthError } from '@biblio/core';
 import { ViewKind } from '../enums.js';
 import type { ViewState } from '../view-state.js';
+import { friendlyMessage } from './friendly-message.js';
 
 export type ScrapeRunner = (
   creds: Credentials,
   onProgress: (event: ProgressEvent) => void,
 ) => Promise<FetchResult>;
-
-function friendlyMessage(err: unknown): string {
-  if (err instanceof LibraryAuthError) return 'שם משתמש או סיסמה שגויים.';
-  if (err instanceof Error) {
-    const withCode = err as Error & { code?: FetchErrorCode };
-    if (withCode.code === FetchErrorCode.InvalidCredentials) {
-      return 'שם משתמש או סיסמה שגויים.';
-    }
-    return err.message;
-  }
-  return 'שגיאה לא צפויה. נסה שוב.';
-}
 
 export interface UseScrape {
   state: ViewState;

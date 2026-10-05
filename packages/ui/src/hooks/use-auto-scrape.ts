@@ -5,22 +5,11 @@ import type {
   ProgressEvent,
   ResultCache,
 } from '@biblio/core';
-import { FetchErrorCode, LibraryAuthError } from '@biblio/core';
+import { FetchErrorCode, toFetchErrorCode } from '@biblio/core';
 import { ViewKind } from '../enums.js';
 import type { ViewState } from '../view-state.js';
 import type { ScrapeRunner } from './use-scrape.js';
-
-function friendlyMessage(err: unknown): string {
-  if (err instanceof LibraryAuthError) return 'שם משתמש או סיסמה שגויים.';
-  if (err instanceof Error) {
-    const withCode = err as Error & { code?: FetchErrorCode };
-    if (withCode.code === FetchErrorCode.InvalidCredentials) {
-      return 'שם משתמש או סיסמה שגויים.';
-    }
-    return err.message;
-  }
-  return 'שגיאה לא צפויה. נסה שוב.';
-}
+import { friendlyMessage } from './friendly-message.js';
 
 export interface UseAutoScrape {
   state: ViewState;
@@ -64,7 +53,7 @@ export function useAutoScrape(options: UseAutoScrapeOptions): UseAutoScrape {
       } catch (err) {
         if (!activeRef.current) return;
         setState({ kind: ViewKind.Error, message: friendlyMessage(err) });
-        if ((err as { code?: FetchErrorCode }).code === FetchErrorCode.InvalidCredentials) {
+        if (toFetchErrorCode(err) === FetchErrorCode.InvalidCredentials) {
           await credentialStore.clear();
           setHasStoredCreds(false);
         }

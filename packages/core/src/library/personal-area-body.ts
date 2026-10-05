@@ -19,10 +19,3 @@ export function loginBody(username: string, password: string): string {
     ['pswd', password],
   ]);
 }
-
-const CNUMBER_RE = /CNumber=(\d+)/;
-
-export function extractUserId(loginResponseBody: string): string | null {
-  const m = loginResponseBody.match(CNUMBER_RE);
-  return m ? m[1] : null;
-}

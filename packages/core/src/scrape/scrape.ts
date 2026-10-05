@@ -1,8 +1,9 @@
 import type { FetchResult, Member } from '../schemas.js';
-import type { LibraryClient } from '../library/client.js';
+import type { LibraryClient, LoggedIn } from '../library/client.js';
 import { parseBooks } from '../parsers/books.js';
 import { parseFamilyMembers } from '../parsers/family.js';
 import { parseMemberName } from '../parsers/member-name.js';
+import { assertPersonalAreaPage } from '../parsers/personal-area-page.js';
 import { ProgressKind } from '../enums.js';
 import type { ProgressListener } from './progress.js';
 
@@ -11,6 +12,16 @@ export interface ScrapeOptions {
   password: string;
   client: LibraryClient;
   onProgress?: ProgressListener;
+}
+
+async function fetchPage(
+  client: LibraryClient,
+  session: LoggedIn,
+  familyItemId: string | null,
+): Promise<string> {
+  const html = await client.fetchPersonalArea(session, familyItemId);
+  assertPersonalAreaPage(html);
+  return html;
 }
 
 export async function scrape(opts: ScrapeOptions): Promise<FetchResult> {
@@ -22,10 +33,10 @@ export async function scrape(opts: ScrapeOptions): Promise<FetchResult> {
   emit({ kind: ProgressKind.LoggedIn, userId: session.userId });
 
   emit({ kind: ProgressKind.FetchingMain });
-  const mainHtml = await client.fetchPersonalArea(session, null);
+  const mainHtml = await fetchPage(client, session, null);
 
   const primary: Member = {
-    name: parseMemberName(mainHtml),
+    name: parseMemberName(mainHtml) ?? username,
     id: session.userId,
     isPrimary: true,
     books: parseBooks(mainHtml),
@@ -47,9 +58,9 @@ export async function scrape(opts: ScrapeOptions): Promise<FetchResult> {
       index: i + 1,
       total: family.length,
     });
-    const html = await client.fetchPersonalArea(session, ref.id);
+    const html = await fetchPage(client, session, ref.id);
     relatives.push({
-      name: parseMemberName(html) || ref.name,
+      name: parseMemberName(html) ?? ref.name,
       id: ref.id,
       isPrimary: false,
       books: parseBooks(html),

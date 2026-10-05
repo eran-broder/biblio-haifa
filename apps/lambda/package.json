@@ -1,0 +1,22 @@
+{
+  "name": "@biblio/lambda",
+  "version": "0.2.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "deploy": "node scripts/build.mjs && node scripts/deploy.mjs",
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf dist function.zip *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@biblio/core": "workspace:*",
+    "@biblio/http-node": "workspace:*",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.3",
+    "adm-zip": "^0.5.17",
+    "esbuild": "^0.27.7"
+  }
+}

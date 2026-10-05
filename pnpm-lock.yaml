@@ -92,6 +92,28 @@ importers:
         specifier: ^5.4.11
         version: 5.4.21(@types/node@22.19.17)(lightningcss@1.32.0)
 
+  apps/lambda:
+    dependencies:
+      '@biblio/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@biblio/http-node':
+        specifier: workspace:*
+        version: link:../../packages/http-node
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
+    devDependencies:
+      '@types/node':
+        specifier: ^22.9.3
+        version: 22.19.17
+      adm-zip:
+        specifier: ^0.5.17
+        version: 0.5.17
+      esbuild:
+        specifier: ^0.27.7
+        version: 0.27.7
+
   apps/web:
     dependencies:
       '@biblio/core':

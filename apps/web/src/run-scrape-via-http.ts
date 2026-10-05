@@ -2,8 +2,8 @@ import {
   FetchErrorCode,
   FetchErrorSchema,
   FetchResultSchema,
-  LibraryAuthError,
   LibraryNetworkError,
+  errorFromCode,
   type Credentials,
   type FetchResult,
 } from '@biblio/core';
@@ -36,8 +36,7 @@ export async function runScrapeViaHttp(creds: Credentials): Promise<FetchResult>
     const parsed = FetchErrorSchema.safeParse(body);
     const message = parsed.success ? parsed.data.error : `Request failed (${response.status}).`;
     const code = parsed.success ? parsed.data.code : FetchErrorCode.Unknown;
-    if (code === FetchErrorCode.InvalidCredentials) throw new LibraryAuthError(message);
-    throw new LibraryNetworkError(message);
+    throw errorFromCode(code, message);
   }
 
   const parsed = FetchResultSchema.safeParse(body);

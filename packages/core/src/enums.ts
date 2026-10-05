@@ -1,5 +1,6 @@
 export enum FetchErrorCode {
   InvalidCredentials = 'invalid_credentials',
+  UnexpectedResponse = 'unexpected_response',
   Network = 'network',
   Unknown = 'unknown',
 }
@@ -18,4 +19,10 @@ export enum StampTone {
   Urgent = 'urgent',
   Soon = 'soon',
   Safe = 'safe',
+}
+
+export enum LoginOutcome {
+  Accepted = 'accepted',
+  Rejected = 'rejected',
+  Unrecognized = 'unrecognized',
 }

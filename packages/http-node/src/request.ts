@@ -5,6 +5,7 @@ import { extractSessionId } from './cookies.js';
 export interface RawResponse {
   body: string;
   statusCode: number;
+  location: string | null;
   sessionId: string | null;
 }
 
@@ -20,6 +21,7 @@ export function httpsRequest(
         resolve({
           body: Buffer.concat(chunks).toString('utf8'),
           statusCode: res.statusCode ?? 0,
+          location: res.headers.location ?? null,
           sessionId: extractSessionId(res.headers['set-cookie']),
         });
       });
